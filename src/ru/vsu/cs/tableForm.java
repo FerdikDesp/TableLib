@@ -73,6 +73,8 @@ public class tableForm extends JFrame {
         ConcoleTable.setEnabled(false);
         ConcoleTable.setBackground(Color.black);
 
+        updateTable();
+
         addToLog("Программа успешно запущена!");
 
         buttonIncreaseColumns.addActionListener(new ActionListener() {
