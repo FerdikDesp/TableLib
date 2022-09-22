@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
+import java.awt.event.ContainerAdapter;
 import java.util.Date;
 
 
@@ -40,6 +41,17 @@ public class tableForm extends JFrame {
         }
     }
 
+    private void updateTable() {
+        ConcoleTable.setText("");
+        for (int i = 0; i < tableMain.getRowCount(); i++) {
+            for (int j = 0; j < tableMain.getColumnCount(); j++) {
+                table.setCellValue(i, j, String.valueOf(tableModel.getValueAt(i, j)));
+                ConcoleTable.setText(ConcoleTable.getText() + table.getCellValue(i, j) + "\t");
+            }
+            ConcoleTable.setText(ConcoleTable.getText() + "\n");
+        }
+    }
+
     public tableForm() {
         this.setTitle("Таблица");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -68,6 +80,7 @@ public class tableForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 tableModel.setColumnCount(tableModel.getColumnCount() + 1);
                 table.addColumn();
+                updateTable();
                 addToLog("Количество столбцов увеличено до " + tableModel.getColumnCount());
             }
         });
@@ -78,6 +91,7 @@ public class tableForm extends JFrame {
                 if (tableModel.getColumnCount() > 0) {
                     tableModel.setColumnCount(tableModel.getColumnCount() - 1);
                     table.removeColumn();
+                    updateTable();
                     addToLog("Количество столбцов уменьшено до " + tableModel.getColumnCount());
                 } else {
                     JOptionPane.showMessageDialog(tableForm.this, "Вы не можете удалить несуществующий столбец!", "Ошибка", JOptionPane.ERROR_MESSAGE);
@@ -91,6 +105,7 @@ public class tableForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 tableModel.setRowCount(tableModel.getRowCount() + 1);
                 table.addRow();
+                updateTable();
                 addToLog("Количество строк увеличено до " + tableModel.getRowCount());
             }
         });
@@ -101,6 +116,7 @@ public class tableForm extends JFrame {
                 if (tableModel.getRowCount() > 0) {
                     tableModel.setRowCount(tableModel.getRowCount() - 1);
                     table.removeRow();
+                    updateTable();
                     addToLog("Количество строк уменьшено до " + tableModel.getRowCount());
                 } else {
                     JOptionPane.showMessageDialog(tableForm.this, "Вы не можете удалить несуществующую строку!", "Ошибка", JOptionPane.ERROR_MESSAGE);
@@ -119,6 +135,7 @@ public class tableForm extends JFrame {
                 tableMain.setModel(tableModel);
                 tableMain.getTableHeader().setResizingAllowed(false);
                 tableMain.getTableHeader().setReorderingAllowed(false);
+                updateTable();
                 addToLog("Инициализирована новая таблица");
             }
         });
@@ -142,16 +159,11 @@ public class tableForm extends JFrame {
         buttonUpdateTable.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ConcoleTable.setText("");
-                for (int i = 0; i < tableMain.getRowCount(); i++) {
-                    for (int j = 0; j < tableMain.getColumnCount(); j++) {
-                        table.setCellValue(i, j, String.valueOf(tableModel.getValueAt(i, j)));
-                        ConcoleTable.setText(ConcoleTable.getText() + table.getCellValue(i, j) + "\t");
-                    }
-                    ConcoleTable.setText(ConcoleTable.getText() + "\n");
-                }
+                updateTable();
                 addToLog("Значения ячеек на окне обновлены в классе таблицы");
             }
+        });
+        tableMain.addComponentListener(new ComponentAdapter() {
         });
     }
 }
