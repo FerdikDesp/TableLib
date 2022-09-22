@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ContainerAdapter;
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -30,14 +31,14 @@ public class tableForm extends JFrame {
 
     private Table table;
     private boolean wasTableGenerated = false;
-    Date date;
+    Calendar cal;
 
     private void addToLog(String log) {
-        date = new Date();
+        cal = Calendar.getInstance();
         if (Logs.getText().isEmpty()) {
-            Logs.setText("[" + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "] " + log);
+            Logs.setText("[" + cal.get(Calendar.HOUR) + ":" + cal.get(Calendar.MINUTE) + ":" + cal.get(Calendar.SECOND) + "] " + log);
         } else {
-            Logs.setText(Logs.getText() + "\n[" + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "] " + log);
+            Logs.setText(Logs.getText() + "\n[" + cal.get(Calendar.HOUR) + ":" + cal.get(Calendar.MINUTE) + ":" + cal.get(Calendar.SECOND) + "] " + log);
         }
     }
 

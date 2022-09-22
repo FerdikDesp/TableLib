@@ -12,6 +12,11 @@ public class Table {
         dataTable = new Cell[rowCount][columnCount];
         this.columnCount = columnCount;
         this.rowCount = rowCount;
+        for (int i = 0; i < dataTable.length; i++) {
+            for (int j = 0; j < dataTable[i].length; j++) {
+                dataTable[i][j] = new Cell(null);
+            }
+        }
     }
 
     public void fill() {
@@ -38,6 +43,9 @@ public class Table {
                 tempTable[i][j] = dataTable[i][j];
             }
         }
+        for (int i = 0; i < dataTable[0].length; i++) {
+            tempTable[dataTable.length][i] = new Cell(null);
+        }
         dataTable = tempTable;
     }
 
@@ -47,6 +55,7 @@ public class Table {
             for (int j = 0; j < dataTable[i].length; j++) {
                 tempTable[i][j] = dataTable[i][j];
             }
+            tempTable[i][dataTable[i].length] = new Cell(null);
         }
         dataTable = tempTable;
     }
