@@ -58,6 +58,17 @@ public class tableForm extends JFrame {
         }
     }
 
+    private void tempUpdateTable() {
+        ConcoleTable.setText("");
+        for (int i = 0; i < tableMain.getRowCount(); i++) {
+            for (int j = 0; j < tableMain.getColumnCount(); j++) {
+                tableModel.setValueAt(table.getCell(i, j).getValue(), i, j);
+                ConcoleTable.setText(ConcoleTable.getText() + table.getCell(i, j).getValue() + "\t");
+            }
+            ConcoleTable.setText(ConcoleTable.getText() + "\n");
+        }
+    }
+
     public tableForm() {
         this.setTitle("Таблица");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -170,7 +181,15 @@ public class tableForm extends JFrame {
                 addToLog("Значения ячеек на окне обновлены в классе таблицы");
             }
         });
-        tableMain.addComponentListener(new ComponentAdapter() {
+
+        buttonIncreaseCurrentRow.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tableModel.setRowCount(tableModel.getRowCount() + 1);
+                table.addRow((Integer) spinnerNumber.getValue());
+                tempUpdateTable();
+                addToLog("Количество строк увеличено до " + tableModel.getRowCount() + ", добавлена строка " + spinnerNumber.getValue());
+            }
         });
     }
 }
