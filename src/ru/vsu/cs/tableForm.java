@@ -24,6 +24,11 @@ public class tableForm extends JFrame {
     private JTextArea ConcoleTable;
     private JTextArea Logs;
     private JButton buttonUpdateTable;
+    private JSpinner spinnerNumber;
+    private JButton buttonIncreaseCurrentRow;
+    private JButton buttonDecreaseCurrentRow;
+    private JButton buttonIncreaseCurrentColumn;
+    private JButton buttonDecreaseCurrentColumn;
 
     private DefaultTableModel tableModel;
 
