@@ -138,7 +138,7 @@ public class tableForm extends JFrame {
                 tableMain.getTableHeader().setResizingAllowed(false);
                 tableMain.getTableHeader().setReorderingAllowed(false);
                 updateTable();
-                addToLog("Инициализирована новая таблица");
+                addToLog("Инициализирована новая таблица 5x5");
             }
         });
 
