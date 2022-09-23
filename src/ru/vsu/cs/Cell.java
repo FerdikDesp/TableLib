@@ -3,6 +3,8 @@ package ru.vsu.cs;
 public class Cell {
 
     private String value;
+    private int row;
+    private int column;
 
     public Cell(String value) {
         this.value = value;

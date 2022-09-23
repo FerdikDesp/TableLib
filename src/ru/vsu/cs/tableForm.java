@@ -36,7 +36,7 @@ public class tableForm extends JFrame {
     private void addToLog(String log) {
         cal = Calendar.getInstance();
         if (Logs.getText().isEmpty()) {
-            Logs.setText("[" + cal.get(Calendar.HOUR) + ":" + cal.get(Calendar.MINUTE) + ":" + cal.get(Calendar.SECOND) + "] " + log);
+            Logs.setText("[" + cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE) + ":" + cal.get(Calendar.SECOND) + "] " + log);
         } else {
             Logs.setText(Logs.getText() + "\n[" + cal.get(Calendar.HOUR) + ":" + cal.get(Calendar.MINUTE) + ":" + cal.get(Calendar.SECOND) + "] " + log);
         }
@@ -46,8 +46,8 @@ public class tableForm extends JFrame {
         ConcoleTable.setText("");
         for (int i = 0; i < tableMain.getRowCount(); i++) {
             for (int j = 0; j < tableMain.getColumnCount(); j++) {
-                table.setCellValue(i, j, String.valueOf(tableModel.getValueAt(i, j)));
-                ConcoleTable.setText(ConcoleTable.getText() + table.getCellValue(i, j) + "\t");
+                table.getCell(i, j).setValue(String.valueOf(tableModel.getValueAt(i, j)));
+                ConcoleTable.setText(ConcoleTable.getText() + table.getCell(i, j).getValue() + "\t");
             }
             ConcoleTable.setText(ConcoleTable.getText() + "\n");
         }
@@ -149,8 +149,8 @@ public class tableForm extends JFrame {
                 ConcoleTable.setText("");
                 for (int i = 0; i < tableMain.getRowCount(); i++) {
                     for (int j = 0; j < tableMain.getColumnCount(); j++) {
-                        tableModel.setValueAt(table.getCellValue(i, j), i, j);
-                        ConcoleTable.setText(ConcoleTable.getText() + table.getCellValue(i, j) + "\t");
+                        tableModel.setValueAt(table.getCell(i, j).getValue(), i, j);
+                        ConcoleTable.setText(ConcoleTable.getText() + table.getCell(i, j).getValue() + "\t");
                     }
                     ConcoleTable.setText(ConcoleTable.getText() + "\n");
                 }

@@ -28,12 +28,8 @@ public class Table {
         }
     }
 
-    public String getCellValue(int row, int column) {
-        return dataTable[row][column].getValue();
-    }
-
-    public void setCellValue(int row, int column, String value) {
-        dataTable[row][column].setValue(value);
+    public Cell getCell(int row, int column) {
+        return dataTable[row][column];
     }
 
     public void addRow() {
