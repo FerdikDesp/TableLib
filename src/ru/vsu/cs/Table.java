@@ -19,7 +19,7 @@ public class Table {
         }
     }
 
-    public void fill() {
+    public void fillRandom() {
         Random random = new Random();
         for (int i = 0; i < dataTable.length; i++) {
             for (int j = 0; j < dataTable[i].length; j++) {

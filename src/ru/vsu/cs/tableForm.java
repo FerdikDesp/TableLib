@@ -5,10 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ContainerAdapter;
 import java.util.Calendar;
-import java.util.Date;
 
 
 public class tableForm extends JFrame {
@@ -106,13 +103,13 @@ public class tableForm extends JFrame {
         buttonDecreaseColumns.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (tableModel.getColumnCount() > 0) {
+                if (tableModel.getColumnCount() > 1) {
                     tableModel.setColumnCount(tableModel.getColumnCount() - 1);
                     table.removeColumn();
                     updateTable();
                     addToLog("Количество столбцов уменьшено до " + tableModel.getColumnCount());
                 } else {
-                    JOptionPane.showMessageDialog(tableForm.this, "Вы не можете удалить несуществующий столбец!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(tableForm.this, "Вы не можете удалить последний столбец!", "Ошибка", JOptionPane.ERROR_MESSAGE);
                     addToLog("Не удалось уменьшить количество столбцов");
                 }
             }
@@ -131,13 +128,13 @@ public class tableForm extends JFrame {
         buttonDecreaseRows.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (tableModel.getRowCount() > 0) {
+                if (tableModel.getRowCount() > 1) {
                     tableModel.setRowCount(tableModel.getRowCount() - 1);
                     table.removeRow();
                     updateTable();
                     addToLog("Количество строк уменьшено до " + tableModel.getRowCount());
                 } else {
-                    JOptionPane.showMessageDialog(tableForm.this, "Вы не можете удалить несуществующую строку!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(tableForm.this, "Вы не можете удалить последнюю строку!", "Ошибка", JOptionPane.ERROR_MESSAGE);
                     addToLog("Не удалось уменьшить количество строк");
                 }
             }
@@ -161,7 +158,7 @@ public class tableForm extends JFrame {
         buttonFillTable.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                table.fill();
+                table.fillRandom();
                 ConcoleTable.setText("");
                 for (int i = 0; i < tableMain.getRowCount(); i++) {
                     for (int j = 0; j < tableMain.getColumnCount(); j++) {
