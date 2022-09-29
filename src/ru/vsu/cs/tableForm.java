@@ -3,8 +3,6 @@ package ru.vsu.cs;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Calendar;
 
 
@@ -18,7 +16,7 @@ public class tableForm extends JFrame {
     private JButton buttonIncreaseRows;
     private JButton buttonDecreaseRows;
     private JButton buttonInitTable;
-    private JTextArea ConcoleTable;
+    private JTextArea ConsoleTable;
     private JTextArea Logs;
     private JButton buttonUpdateTable;
     private JSpinner spinnerNumber;
@@ -26,13 +24,12 @@ public class tableForm extends JFrame {
     private JButton buttonDecreaseCurrentRow;
     private JButton buttonIncreaseCurrentColumn;
     private JButton buttonDecreaseCurrentColumn;
+    private JSpinner spinnerMin;
+    private JSpinner spinnerMax;
 
     private DefaultTableModel tableModel;
 
-    private DefaultTableModel tempTableModel;
-
-    private Table table;
-    private boolean wasTableGenerated = false;
+    private ListTable table;
     Calendar cal;
 
     private void addToLog(String log) {
@@ -40,30 +37,26 @@ public class tableForm extends JFrame {
         if (Logs.getText().isEmpty()) {
             Logs.setText("[" + cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE) + ":" + cal.get(Calendar.SECOND) + "] " + log);
         } else {
-            Logs.setText(Logs.getText() + "\n[" + cal.get(Calendar.HOUR) + ":" + cal.get(Calendar.MINUTE) + ":" + cal.get(Calendar.SECOND) + "] " + log);
+            Logs.setText(Logs.getText() + "\n[" + cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE) + ":" + cal.get(Calendar.SECOND) + "] " + log);
         }
+    }
+
+    private void updateModel() {
+        for (int row = 0; row < tableMain.getRowCount(); row++) {
+            for (int column = 0; column < tableMain.getColumnCount(); column++) {
+                tableModel.setValueAt(table.getCellValue(row, column), row, column);
+            }
+        }
+        ConsoleTable.setText(table.print());
     }
 
     private void updateTable() {
-        ConcoleTable.setText("");
-        for (int i = 0; i < tableMain.getRowCount(); i++) {
-            for (int j = 0; j < tableMain.getColumnCount(); j++) {
-                table.getCell(i, j).setValue(String.valueOf(tableModel.getValueAt(i, j)));
-                ConcoleTable.setText(ConcoleTable.getText() + table.getCell(i, j).getValue() + "\t");
+        for (int row = 0; row < tableMain.getRowCount(); row++) {
+            for (int column = 0; column < tableMain.getColumnCount(); column++) {
+                table.setCellValue(row, column, String.valueOf(tableModel.getValueAt(row, column)));
             }
-            ConcoleTable.setText(ConcoleTable.getText() + "\n");
         }
-    }
-
-    private void tempUpdateTable() {
-        ConcoleTable.setText("");
-        for (int i = 0; i < tableMain.getRowCount(); i++) {
-            for (int j = 0; j < tableMain.getColumnCount(); j++) {
-                tableModel.setValueAt(table.getCell(i, j).getValue(), i, j);
-                ConcoleTable.setText(ConcoleTable.getText() + table.getCell(i, j).getValue() + "\t");
-            }
-            ConcoleTable.setText(ConcoleTable.getText() + "\n");
-        }
+        ConsoleTable.setText(table.print());
     }
 
     public tableForm() {
@@ -76,7 +69,7 @@ public class tableForm extends JFrame {
         tableModel = new DefaultTableModel();
         tableModel.setColumnCount(5);
         tableModel.setRowCount(5);
-        table = new Table(tableModel.getRowCount(), tableModel.getColumnCount());
+        table = new ListTable(tableModel.getRowCount(), tableModel.getColumnCount());
         tableMain.setModel(tableModel);
         tableMain.getTableHeader().setResizingAllowed(false);
         tableMain.getTableHeader().setReorderingAllowed(false);
@@ -84,109 +77,100 @@ public class tableForm extends JFrame {
         Logs.setEnabled(false);
         Logs.setBackground(Color.black);
 
-        ConcoleTable.setEnabled(false);
-        ConcoleTable.setBackground(Color.black);
+        ConsoleTable.setEnabled(false);
+        ConsoleTable.setBackground(Color.black);
 
         updateTable();
         addToLog("Программа успешно запущена!");
 
-        buttonIncreaseColumns.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tableModel.setColumnCount(tableModel.getColumnCount() + 1);
-                table.addColumn();
+        buttonIncreaseColumns.addActionListener(e -> {
+            tableModel.setColumnCount(tableModel.getColumnCount() + 1);
+            table.addColumn();
+            updateTable();
+            addToLog("Количество столбцов увеличено до " + tableModel.getColumnCount());
+        });
+
+        buttonDecreaseColumns.addActionListener(e -> {
+            if (tableModel.getColumnCount() > 1) {
+                tableModel.setColumnCount(tableModel.getColumnCount() - 1);
+                table.removeLastColumn();
                 updateTable();
-                addToLog("Количество столбцов увеличено до " + tableModel.getColumnCount());
+                addToLog("Количество столбцов уменьшено до " + tableModel.getColumnCount());
+            } else {
+                JOptionPane.showMessageDialog(tableForm.this, "Вы не можете удалить последний столбец!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                addToLog("Не удалось уменьшить количество столбцов");
             }
         });
 
-        buttonDecreaseColumns.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (tableModel.getColumnCount() > 1) {
-                    tableModel.setColumnCount(tableModel.getColumnCount() - 1);
-                    table.removeColumn();
-                    updateTable();
-                    addToLog("Количество столбцов уменьшено до " + tableModel.getColumnCount());
-                } else {
-                    JOptionPane.showMessageDialog(tableForm.this, "Вы не можете удалить последний столбец!", "Ошибка", JOptionPane.ERROR_MESSAGE);
-                    addToLog("Не удалось уменьшить количество столбцов");
-                }
-            }
+        buttonIncreaseRows.addActionListener(e -> {
+            tableModel.setRowCount(tableModel.getRowCount() + 1);
+            table.addRow();
+            updateTable();
+            addToLog("Количество строк увеличено до " + tableModel.getRowCount());
         });
 
-        buttonIncreaseRows.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tableModel.setRowCount(tableModel.getRowCount() + 1);
-                table.addRow();
+        buttonDecreaseRows.addActionListener(e -> {
+            if (tableModel.getRowCount() > 1) {
+                tableModel.setRowCount(tableModel.getRowCount() - 1);
+                table.removeLastRow();
                 updateTable();
-                addToLog("Количество строк увеличено до " + tableModel.getRowCount());
+                addToLog("Количество строк уменьшено до " + tableModel.getRowCount());
+            } else {
+                JOptionPane.showMessageDialog(tableForm.this, "Вы не можете удалить последнюю строку!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                addToLog("Не удалось уменьшить количество строк");
             }
         });
 
-        buttonDecreaseRows.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (tableModel.getRowCount() > 1) {
-                    tableModel.setRowCount(tableModel.getRowCount() - 1);
-                    table.removeRow();
-                    updateTable();
-                    addToLog("Количество строк уменьшено до " + tableModel.getRowCount());
-                } else {
-                    JOptionPane.showMessageDialog(tableForm.this, "Вы не можете удалить последнюю строку!", "Ошибка", JOptionPane.ERROR_MESSAGE);
-                    addToLog("Не удалось уменьшить количество строк");
-                }
-            }
+        buttonInitTable.addActionListener(e -> {
+            tableModel = new DefaultTableModel();
+            tableModel.setColumnCount((Integer) spinnerMax.getValue());
+            tableModel.setRowCount((Integer) spinnerMin.getValue());
+            table = new ListTable(tableModel.getRowCount(), tableModel.getColumnCount());
+            tableMain.setModel(tableModel);
+            tableMain.getTableHeader().setResizingAllowed(false);
+            tableMain.getTableHeader().setReorderingAllowed(false);
+            updateTable();
+            addToLog("Инициализирована новая таблица " + tableModel.getRowCount() + "x" + tableModel.getColumnCount());
         });
 
-        buttonInitTable.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tableModel = new DefaultTableModel();
-                tableModel.setColumnCount(5);
-                tableModel.setRowCount(5);
-                table = new Table(tableModel.getRowCount(), tableModel.getColumnCount());
-                tableMain.setModel(tableModel);
-                tableMain.getTableHeader().setResizingAllowed(false);
-                tableMain.getTableHeader().setReorderingAllowed(false);
-                updateTable();
-                addToLog("Инициализирована новая таблица 5x5");
-            }
+        buttonFillTable.addActionListener(e -> {
+            table.fillRandom((Integer) spinnerMin.getValue(), (Integer) spinnerMax.getValue());
+            ConsoleTable.setText("");
+            updateModel();
+            addToLog("Таблица была заполнена числами");
         });
 
-        buttonFillTable.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                table.fillRandom();
-                ConcoleTable.setText("");
-                for (int i = 0; i < tableMain.getRowCount(); i++) {
-                    for (int j = 0; j < tableMain.getColumnCount(); j++) {
-                        tableModel.setValueAt(table.getCell(i, j).getValue(), i, j);
-                        ConcoleTable.setText(ConcoleTable.getText() + table.getCell(i, j).getValue() + "\t");
-                    }
-                    ConcoleTable.setText(ConcoleTable.getText() + "\n");
-                }
-                addToLog("Таблица была заполнена числами");
-            }
+        buttonUpdateTable.addActionListener(e -> {
+            updateTable();
+            addToLog("Значения ячеек на окне обновлены в классе таблицы");
         });
 
-        buttonUpdateTable.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateTable();
-                addToLog("Значения ячеек на окне обновлены в классе таблицы");
-            }
+        buttonIncreaseCurrentRow.addActionListener(e -> {
+            tableModel.setRowCount(tableModel.getRowCount() + 1);
+            table.addCurRow((Integer) spinnerNumber.getValue());
+            updateModel();
+            addToLog("Количество строк увеличено до " + tableModel.getRowCount() + ", добавлена строка " + spinnerNumber.getValue());
         });
 
-        buttonIncreaseCurrentRow.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tableModel.setRowCount(tableModel.getRowCount() + 1);
-                table.addRow((Integer) spinnerNumber.getValue());
-                tempUpdateTable();
-                addToLog("Количество строк увеличено до " + tableModel.getRowCount() + ", добавлена строка " + spinnerNumber.getValue());
-            }
+        buttonDecreaseCurrentRow.addActionListener(e -> {
+            tableModel.setRowCount(tableModel.getRowCount() - 1);
+            table.removeRow((Integer) spinnerNumber.getValue());
+            updateModel();
+            addToLog("Количество строк уменьшено до " + tableModel.getRowCount() + ", убрана строка " + spinnerNumber.getValue());
+        });
+
+        buttonIncreaseCurrentColumn.addActionListener(e -> {
+            tableModel.setColumnCount(tableModel.getColumnCount() + 1);
+            table.addCurColumn((Integer) spinnerNumber.getValue());
+            updateModel();
+            addToLog("Количество столбцов увеличено до " + tableModel.getRowCount() + ", добавлен столбец " + spinnerNumber.getValue());
+        });
+
+        buttonDecreaseCurrentColumn.addActionListener(e -> {
+            tableModel.setColumnCount(tableModel.getColumnCount() - 1);
+            table.removeColumn((Integer) spinnerNumber.getValue());
+            updateModel();
+            addToLog("Количество столбцов уменьшено до " + tableModel.getRowCount() + ", убран столбец " + spinnerNumber.getValue());
         });
     }
 }

@@ -6,15 +6,5 @@ public class Main {
 
         new tableForm();
 
-        ListTable table = new ListTable(5, 5);
-
-        table.print();
-
-        System.out.println();
-
-        table.removeColumn(1);
-
-        table.print();
-
     }
 }
