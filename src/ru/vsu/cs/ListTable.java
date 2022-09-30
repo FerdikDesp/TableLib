@@ -6,11 +6,9 @@ import java.util.Random;
 public class ListTable {
 
     private ArrayList<ArrayList<String>> dataTable;
-    private int rowCount;
     private int columnCount;
 
-    public ListTable(int rowCount, int columnCount) {
-        this.rowCount = rowCount;
+    ListTable(int rowCount, int columnCount) {
         this.columnCount = columnCount;
         dataTable = new ArrayList<>();
         for (int row = 0; row < rowCount; row++) {
@@ -39,7 +37,6 @@ public class ListTable {
     }
 
     public void addRow() {
-        rowCount++;
         dataTable.add(new ArrayList<>());
         for (int column = 0; column < columnCount; column++) {
             dataTable.get(dataTable.size() - 1).add(null);
@@ -47,7 +44,6 @@ public class ListTable {
     }
 
     public void addCurRow(int row) {
-        rowCount++;
         dataTable.add(row, new ArrayList<>());
         for (int column = 0; column < columnCount; column++) {
             dataTable.get(row).add(null);
@@ -55,12 +51,10 @@ public class ListTable {
     }
 
     public void removeLastRow() {
-        rowCount--;
         dataTable.remove(dataTable.size() - 1);
     }
 
     public void removeRow(int row) {
-        rowCount--;
         dataTable.remove(row);
     }
 
@@ -96,7 +90,7 @@ public class ListTable {
         StringBuilder sb = new StringBuilder();
         for (ArrayList<String> row : dataTable) {
             for (Object column : row) {
-                sb.append(column + "\t");
+                sb.append(column).append("\t");
             }
             sb.append("\n");
         }
