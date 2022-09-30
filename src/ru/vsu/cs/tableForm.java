@@ -30,10 +30,9 @@ public class tableForm extends JFrame {
     private DefaultTableModel tableModel;
 
     private ListTable table;
-    Calendar cal;
 
     private void addToLog(String log) {
-        cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance();
         if (Logs.getText().isEmpty()) {
             Logs.setText("[" + cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE) + ":" + cal.get(Calendar.SECOND) + "] " + log);
         } else {
@@ -59,9 +58,9 @@ public class tableForm extends JFrame {
         ConsoleTable.setText(table.print());
     }
 
-    public tableForm() {
+    tableForm() {
         this.setTitle("Таблица");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setExtendedState(MAXIMIZED_BOTH);
         this.setVisible(true);
         this.setContentPane(mainPanel);
@@ -153,10 +152,15 @@ public class tableForm extends JFrame {
         });
 
         buttonDecreaseCurrentRow.addActionListener(e -> {
-            tableModel.setRowCount(tableModel.getRowCount() - 1);
-            table.removeRow((Integer) spinnerNumber.getValue());
-            updateModel();
-            addToLog("Количество строк уменьшено до " + tableModel.getRowCount() + ", убрана строка " + spinnerNumber.getValue());
+            if ((Integer) spinnerNumber.getValue() < 0 || (Integer) spinnerNumber.getValue() >= tableModel.getRowCount()) {
+                JOptionPane.showMessageDialog(tableForm.this, "Вы не можете удалить несуществующую строку!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                addToLog("Не удалось убрать строку");
+            } else {
+                tableModel.setRowCount(tableModel.getRowCount() - 1);
+                table.removeRow((Integer) spinnerNumber.getValue());
+                updateModel();
+                addToLog("Количество строк уменьшено до " + tableModel.getRowCount() + ", убрана строка " + spinnerNumber.getValue());
+            }
         });
 
         buttonIncreaseCurrentColumn.addActionListener(e -> {
@@ -167,10 +171,15 @@ public class tableForm extends JFrame {
         });
 
         buttonDecreaseCurrentColumn.addActionListener(e -> {
-            tableModel.setColumnCount(tableModel.getColumnCount() - 1);
-            table.removeColumn((Integer) spinnerNumber.getValue());
-            updateModel();
-            addToLog("Количество столбцов уменьшено до " + tableModel.getRowCount() + ", убран столбец " + spinnerNumber.getValue());
+            if ((Integer) spinnerNumber.getValue() < 0 || (Integer) spinnerNumber.getValue() >= tableModel.getColumnCount()) {
+                JOptionPane.showMessageDialog(tableForm.this, "Вы не можете удалить несуществующий столбец!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                addToLog("Не удалось убрать столбец");
+            } else {
+                tableModel.setColumnCount(tableModel.getColumnCount() - 1);
+                table.removeColumn((Integer) spinnerNumber.getValue());
+                updateModel();
+                addToLog("Количество столбцов уменьшено до " + tableModel.getRowCount() + ", убран столбец " + spinnerNumber.getValue());
+            }
         });
     }
 }
