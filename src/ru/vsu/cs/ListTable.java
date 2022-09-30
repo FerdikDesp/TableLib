@@ -86,6 +86,40 @@ public class ListTable {
         }
     }
 
+    public void sortByRow(int row) {
+        for (int i = 0; i < dataTable.size(); i++) {
+            for (int j = i; j < dataTable.size(); j++) {
+                if (i == j) {
+                    continue;
+                }
+                if (Integer.parseInt(dataTable.get(row).get(j)) > Integer.parseInt(dataTable.get(row).get(i))) {
+                    for (ArrayList<String> k : dataTable) {
+                        String temp = k.get(j);
+                        k.set(j, k.get(i));
+                        k.set(i, temp);
+                    }
+                }
+            }
+        }
+    }
+
+    public void sortByColumn(int column) {
+        for (int i = 0; i < dataTable.size(); i++) {
+            for (int j = i; j < dataTable.size(); j++) {
+                if (i == j) {
+                    continue;
+                }
+                if (Integer.parseInt(dataTable.get(j).get(column)) > Integer.parseInt(dataTable.get(i).get(column))) {
+                    for (int k = 0; k < dataTable.size(); k++) {
+                        String temp = dataTable.get(j).get(k);
+                        dataTable.get(j).set(k, dataTable.get(i).get(k));
+                        dataTable.get(i).set(k, temp);
+                    }
+                }
+            }
+        }
+    }
+
     public String print() {
         StringBuilder sb = new StringBuilder();
         for (ArrayList<String> row : dataTable) {

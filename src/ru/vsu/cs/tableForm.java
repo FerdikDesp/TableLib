@@ -26,6 +26,8 @@ public class tableForm extends JFrame {
     private JButton buttonDecreaseCurrentColumn;
     private JSpinner spinnerMin;
     private JSpinner spinnerMax;
+    private JButton buttonSortByRow;
+    private JButton buttonSortByColumn;
 
     private DefaultTableModel tableModel;
 
@@ -138,7 +140,7 @@ public class tableForm extends JFrame {
         });
 
         buttonFillTable.addActionListener(e -> {
-            if ((Integer) spinnerMax.getValue() <= 0) {
+            if ((Integer) spinnerMax.getValue() - (Integer) spinnerMin.getValue() <= 0) {
                 JOptionPane.showMessageDialog(tableForm.this, "Вы не можете заполнить таблицу отрицательными числами!", "Ошибка", JOptionPane.ERROR_MESSAGE);
                 addToLog("Не удалось заполнить таблицу");
                 return;
@@ -200,6 +202,28 @@ public class tableForm extends JFrame {
                 updateModel();
                 addToLog("Количество столбцов уменьшено до " + tableModel.getRowCount() + ", убран столбец " + spinnerNumber.getValue());
             }
+        });
+
+        buttonSortByRow.addActionListener(e -> {
+            if ((Integer) spinnerNumber.getValue() < 0 || (Integer) spinnerNumber.getValue() >= tableModel.getRowCount()) {
+                JOptionPane.showMessageDialog(tableForm.this, "Вы не можете сортировать таблицу по несуществующей строке!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                addToLog("Не удалось отсортировать таблицу по строке");
+                return;
+            }
+            table.sortByRow((Integer) spinnerNumber.getValue());
+            updateModel();
+            addToLog("Таблица сгруппирована по строке " + spinnerNumber.getValue());
+        });
+
+        buttonSortByColumn.addActionListener(e -> {
+            if ((Integer) spinnerNumber.getValue() < 0 || (Integer) spinnerNumber.getValue() >= tableModel.getColumnCount()) {
+                JOptionPane.showMessageDialog(tableForm.this, "Вы не можете сортировать таблицу по несуществующему столбцу!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                addToLog("Не удалось отсортировать таблицу по столбцу");
+                return;
+            }
+            table.sortByColumn((Integer) spinnerNumber.getValue());
+            updateModel();
+            addToLog("Таблица сгруппирована по столбцу " + spinnerNumber.getValue());
         });
     }
 }
