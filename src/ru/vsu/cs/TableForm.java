@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.Calendar;
 
 
-public class tableForm extends JFrame {
+public class TableForm extends JFrame {
 
     private JPanel mainPanel;
     private JButton buttonFillTable;
@@ -60,7 +60,7 @@ public class tableForm extends JFrame {
         ConsoleTable.setText(table.print());
     }
 
-    tableForm() {
+    public TableForm() {
         this.setTitle("Таблица");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setExtendedState(MAXIMIZED_BOTH);
@@ -98,7 +98,7 @@ public class tableForm extends JFrame {
                 updateTable();
                 addToLog("Количество столбцов уменьшено до " + tableModel.getColumnCount());
             } else {
-                JOptionPane.showMessageDialog(tableForm.this, "Вы не можете удалить последний столбец!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(TableForm.this, "Вы не можете удалить последний столбец!", "Ошибка", JOptionPane.ERROR_MESSAGE);
                 addToLog("Не удалось уменьшить количество столбцов");
             }
         });
@@ -117,14 +117,14 @@ public class tableForm extends JFrame {
                 updateTable();
                 addToLog("Количество строк уменьшено до " + tableModel.getRowCount());
             } else {
-                JOptionPane.showMessageDialog(tableForm.this, "Вы не можете удалить последнюю строку!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(TableForm.this, "Вы не можете удалить последнюю строку!", "Ошибка", JOptionPane.ERROR_MESSAGE);
                 addToLog("Не удалось уменьшить количество строк");
             }
         });
 
         buttonInitTable.addActionListener(e -> {
             if ((Integer) spinnerMin.getValue() < 1 || (Integer) spinnerMax.getValue() < 1) {
-                JOptionPane.showMessageDialog(tableForm.this, "Вы не можете инициализировать таблицу с таким количеством строк и/или столбцов!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(TableForm.this, "Вы не можете инициализировать таблицу с таким количеством строк и/или столбцов!", "Ошибка", JOptionPane.ERROR_MESSAGE);
                 addToLog("Не удалось инициализировать таблицу");
                 return;
             }
@@ -141,7 +141,7 @@ public class tableForm extends JFrame {
 
         buttonFillTable.addActionListener(e -> {
             if ((Integer) spinnerMax.getValue() - (Integer) spinnerMin.getValue() <= 0) {
-                JOptionPane.showMessageDialog(tableForm.this, "Вы не можете заполнить таблицу отрицательными числами!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(TableForm.this, "Вы не можете заполнить таблицу отрицательными числами!", "Ошибка", JOptionPane.ERROR_MESSAGE);
                 addToLog("Не удалось заполнить таблицу");
                 return;
             }
@@ -158,7 +158,7 @@ public class tableForm extends JFrame {
 
         buttonIncreaseCurrentRow.addActionListener(e -> {
             if ((Integer) spinnerNumber.getValue() < 0 || (Integer) spinnerNumber.getValue() > tableModel.getRowCount()) {
-                JOptionPane.showMessageDialog(tableForm.this, "Вы не можете добавить строку в несуществующую позицию!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(TableForm.this, "Вы не можете добавить строку в несуществующую позицию!", "Ошибка", JOptionPane.ERROR_MESSAGE);
                 addToLog("Не удалось добавить строку");
                 return;
             }
@@ -170,7 +170,7 @@ public class tableForm extends JFrame {
 
         buttonDecreaseCurrentRow.addActionListener(e -> {
             if ((Integer) spinnerNumber.getValue() < 0 || (Integer) spinnerNumber.getValue() >= tableModel.getRowCount()) {
-                JOptionPane.showMessageDialog(tableForm.this, "Вы не можете удалить несуществующую строку!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(TableForm.this, "Вы не можете удалить несуществующую строку!", "Ошибка", JOptionPane.ERROR_MESSAGE);
                 addToLog("Не удалось убрать строку");
             } else {
                 tableModel.setRowCount(tableModel.getRowCount() - 1);
@@ -182,7 +182,7 @@ public class tableForm extends JFrame {
 
         buttonIncreaseCurrentColumn.addActionListener(e -> {
             if ((Integer) spinnerNumber.getValue() < 0 || (Integer) spinnerNumber.getValue() > tableModel.getColumnCount()) {
-                JOptionPane.showMessageDialog(tableForm.this, "Вы не можете добавить столбец в несуществующую позицию!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(TableForm.this, "Вы не можете добавить столбец в несуществующую позицию!", "Ошибка", JOptionPane.ERROR_MESSAGE);
                 addToLog("Не удалось добавить столбец");
                 return;
             }
@@ -194,7 +194,7 @@ public class tableForm extends JFrame {
 
         buttonDecreaseCurrentColumn.addActionListener(e -> {
             if ((Integer) spinnerNumber.getValue() < 0 || (Integer) spinnerNumber.getValue() >= tableModel.getColumnCount()) {
-                JOptionPane.showMessageDialog(tableForm.this, "Вы не можете удалить несуществующий столбец!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(TableForm.this, "Вы не можете удалить несуществующий столбец!", "Ошибка", JOptionPane.ERROR_MESSAGE);
                 addToLog("Не удалось убрать столбец");
             } else {
                 tableModel.setColumnCount(tableModel.getColumnCount() - 1);
@@ -206,7 +206,7 @@ public class tableForm extends JFrame {
 
         buttonSortByRow.addActionListener(e -> {
             if ((Integer) spinnerNumber.getValue() < 0 || (Integer) spinnerNumber.getValue() >= tableModel.getRowCount()) {
-                JOptionPane.showMessageDialog(tableForm.this, "Вы не можете сортировать таблицу по несуществующей строке!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(TableForm.this, "Вы не можете сортировать таблицу по несуществующей строке!", "Ошибка", JOptionPane.ERROR_MESSAGE);
                 addToLog("Не удалось отсортировать таблицу по строке");
                 return;
             }
@@ -217,7 +217,7 @@ public class tableForm extends JFrame {
 
         buttonSortByColumn.addActionListener(e -> {
             if ((Integer) spinnerNumber.getValue() < 0 || (Integer) spinnerNumber.getValue() >= tableModel.getColumnCount()) {
-                JOptionPane.showMessageDialog(tableForm.this, "Вы не можете сортировать таблицу по несуществующему столбцу!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(TableForm.this, "Вы не можете сортировать таблицу по несуществующему столбцу!", "Ошибка", JOptionPane.ERROR_MESSAGE);
                 addToLog("Не удалось отсортировать таблицу по столбцу");
                 return;
             }

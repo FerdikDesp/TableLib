@@ -1,14 +1,15 @@
 package ru.vsu.cs;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class ListTable {
 
-    private final ArrayList<ArrayList<String>> dataTable;
+    private final List<List<String>> dataTable;
     private int columnCount;
 
-    ListTable(int rowCount, int columnCount) {
+    public ListTable(int rowCount, int columnCount) {
         this.columnCount = columnCount;
         dataTable = new ArrayList<>();
         for (int row = 0; row < rowCount; row++) {
@@ -21,7 +22,7 @@ public class ListTable {
 
     public void fillRandom(int minValue, int maxValue) {
         Random random = new Random();
-        for (ArrayList<String> i : dataTable) {
+        for (List<String> i : dataTable) {
             for (int j = 0; j < i.size(); j++) {
                 i.set(j, Integer.toString(random.nextInt(maxValue - minValue) + minValue));
             }
@@ -60,28 +61,28 @@ public class ListTable {
 
     public void addColumn() {
         columnCount++;
-        for (ArrayList<String> row : dataTable) {
+        for (List<String> row : dataTable) {
             row.add(null);
         }
     }
 
     public void addCurColumn(int column) {
         columnCount++;
-        for (ArrayList<String> row : dataTable) {
+        for (List<String> row : dataTable) {
             row.add(column, null);
         }
     }
 
     public void removeLastColumn() {
         columnCount--;
-        for (ArrayList<String> row : dataTable) {
+        for (List<String> row : dataTable) {
             row.remove(row.size() - 1);
         }
     }
 
     public void removeColumn(int column) {
         columnCount--;
-        for (ArrayList<String> row : dataTable) {
+        for (List<String> row : dataTable) {
             row.remove(column);
         }
     }
@@ -93,7 +94,7 @@ public class ListTable {
                     continue;
                 }
                 if (Integer.parseInt(dataTable.get(row).get(j)) > Integer.parseInt(dataTable.get(row).get(i))) {
-                    for (ArrayList<String> k : dataTable) {
+                    for (List<String> k : dataTable) {
                         String temp = k.get(j);
                         k.set(j, k.get(i));
                         k.set(i, temp);
@@ -122,7 +123,7 @@ public class ListTable {
 
     public String print() {
         StringBuilder sb = new StringBuilder();
-        for (ArrayList<String> row : dataTable) {
+        for (List<String> row : dataTable) {
             for (Object column : row) {
                 sb.append(column).append("\t");
             }
