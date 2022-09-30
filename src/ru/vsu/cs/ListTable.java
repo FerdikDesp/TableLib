@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class ListTable {
 
-    private ArrayList<ArrayList<String>> dataTable;
+    private final ArrayList<ArrayList<String>> dataTable;
     private int columnCount;
 
     ListTable(int rowCount, int columnCount) {

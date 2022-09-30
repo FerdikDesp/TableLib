@@ -121,6 +121,11 @@ public class tableForm extends JFrame {
         });
 
         buttonInitTable.addActionListener(e -> {
+            if ((Integer) spinnerMin.getValue() < 1 || (Integer) spinnerMax.getValue() < 1) {
+                JOptionPane.showMessageDialog(tableForm.this, "Вы не можете инициализировать таблицу с таким количеством строк и/или столбцов!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                addToLog("Не удалось инициализировать таблицу");
+                return;
+            }
             tableModel = new DefaultTableModel();
             tableModel.setColumnCount((Integer) spinnerMax.getValue());
             tableModel.setRowCount((Integer) spinnerMin.getValue());
@@ -133,6 +138,11 @@ public class tableForm extends JFrame {
         });
 
         buttonFillTable.addActionListener(e -> {
+            if ((Integer) spinnerMax.getValue() <= 0) {
+                JOptionPane.showMessageDialog(tableForm.this, "Вы не можете заполнить таблицу отрицательными числами!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                addToLog("Не удалось заполнить таблицу");
+                return;
+            }
             table.fillRandom((Integer) spinnerMin.getValue(), (Integer) spinnerMax.getValue());
             ConsoleTable.setText("");
             updateModel();
@@ -145,6 +155,11 @@ public class tableForm extends JFrame {
         });
 
         buttonIncreaseCurrentRow.addActionListener(e -> {
+            if ((Integer) spinnerNumber.getValue() < 0 || (Integer) spinnerNumber.getValue() > tableModel.getRowCount()) {
+                JOptionPane.showMessageDialog(tableForm.this, "Вы не можете добавить строку в несуществующую позицию!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                addToLog("Не удалось добавить строку");
+                return;
+            }
             tableModel.setRowCount(tableModel.getRowCount() + 1);
             table.addCurRow((Integer) spinnerNumber.getValue());
             updateModel();
@@ -164,6 +179,11 @@ public class tableForm extends JFrame {
         });
 
         buttonIncreaseCurrentColumn.addActionListener(e -> {
+            if ((Integer) spinnerNumber.getValue() < 0 || (Integer) spinnerNumber.getValue() > tableModel.getColumnCount()) {
+                JOptionPane.showMessageDialog(tableForm.this, "Вы не можете добавить столбец в несуществующую позицию!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                addToLog("Не удалось добавить столбец");
+                return;
+            }
             tableModel.setColumnCount(tableModel.getColumnCount() + 1);
             table.addCurColumn((Integer) spinnerNumber.getValue());
             updateModel();
