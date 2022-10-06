@@ -28,6 +28,8 @@ public class TableForm extends JFrame {
     private JSpinner spinnerMax;
     private JButton buttonSortByRow;
     private JButton buttonSortByColumn;
+    private JButton buttonGroupBy;
+    private JTextField textFieldGroupBy;
 
     private DefaultTableModel tableModel;
 
@@ -48,7 +50,7 @@ public class TableForm extends JFrame {
                 tableModel.setValueAt(table.getCellValue(row, column), row, column);
             }
         }
-        ConsoleTable.setText(table.print());
+        ConsoleTable.setText(table.toString());
     }
 
     private void updateTable() {
@@ -57,7 +59,7 @@ public class TableForm extends JFrame {
                 table.setCellValue(row, column, String.valueOf(tableModel.getValueAt(row, column)));
             }
         }
-        ConsoleTable.setText(table.print());
+        ConsoleTable.setText(table.toString());
     }
 
     public TableForm() {
@@ -224,6 +226,17 @@ public class TableForm extends JFrame {
             table.sortByColumn((Integer) spinnerNumber.getValue());
             updateModel();
             addToLog("Таблица сгруппирована по столбцу " + spinnerNumber.getValue());
+        });
+        buttonGroupBy.addActionListener(e -> {
+            table = table.groupDataTableBy(textFieldGroupBy.getText());
+            tableModel = new DefaultTableModel();
+            tableModel.setColumnCount(table.getColumnCount());
+            tableModel.setRowCount(table.getRowCount());
+            tableMain.setModel(tableModel);
+            tableMain.getTableHeader().setResizingAllowed(false);
+            tableMain.getTableHeader().setReorderingAllowed(false);
+            updateModel();
+            addToLog("Таблица сгруппирована!");
         });
     }
 }

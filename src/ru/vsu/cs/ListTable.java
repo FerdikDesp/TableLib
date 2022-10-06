@@ -7,9 +7,11 @@ import java.util.Random;
 public class ListTable {
 
     private final List<List<String>> dataTable;
+    private int rowCount;
     private int columnCount;
 
     public ListTable(int rowCount, int columnCount) {
+        this.rowCount = rowCount;
         this.columnCount = columnCount;
         dataTable = new ArrayList<>();
         for (int row = 0; row < rowCount; row++) {
@@ -18,6 +20,20 @@ public class ListTable {
                 dataTable.get(row).add(null);
             }
         }
+    }
+
+    public ListTable(List<List<String>> dataTable) {
+        this.dataTable = dataTable;
+        this.rowCount = dataTable.size();
+        this.columnCount = dataTable.get(0).size();
+    }
+
+    public int getRowCount() {
+        return rowCount;
+    }
+
+    public int getColumnCount() {
+        return columnCount;
     }
 
     public void fillRandom(int minValue, int maxValue) {
@@ -38,6 +54,7 @@ public class ListTable {
     }
 
     public void addRow() {
+        rowCount++;
         dataTable.add(new ArrayList<>());
         for (int column = 0; column < columnCount; column++) {
             dataTable.get(dataTable.size() - 1).add(null);
@@ -45,6 +62,7 @@ public class ListTable {
     }
 
     public void addCurRow(int row) {
+        rowCount++;
         dataTable.add(row, new ArrayList<>());
         for (int column = 0; column < columnCount; column++) {
             dataTable.get(row).add(null);
@@ -52,10 +70,12 @@ public class ListTable {
     }
 
     public void removeLastRow() {
+        rowCount--;
         dataTable.remove(dataTable.size() - 1);
     }
 
     public void removeRow(int row) {
+        rowCount--;
         dataTable.remove(row);
     }
 
@@ -121,7 +141,22 @@ public class ListTable {
         }
     }
 
-    public String print() {
+    public ListTable groupDataTableBy(String textToSearch) {
+        List<List<String>> newDataTable = new ArrayList<>();
+        for (int row = 0; row < rowCount; row++) {
+           newDataTable.add(new ArrayList<>());
+        }
+        for (int column = 0; column < dataTable.get(0).size(); column++) {
+            if (dataTable.get(0).get(column).contains(textToSearch)) {
+                for (int i = 0; i < rowCount; i++) {
+                    newDataTable.get(i).add(dataTable.get(i).get(column));
+                }
+            }
+        }
+        return new ListTable(newDataTable);
+    }
+
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         for (List<String> row : dataTable) {
             for (Object column : row) {
