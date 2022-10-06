@@ -3,6 +3,7 @@ package ru.vsu.cs;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.*;
 import java.util.Calendar;
 
 
@@ -237,6 +238,23 @@ public class TableForm extends JFrame {
             tableMain.getTableHeader().setReorderingAllowed(false);
             updateModel();
             addToLog("Таблица сгруппирована!");
+        });
+        tableMain.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if (e.getKeyCode() == 10) {
+                    updateTable();
+                }
+            }
+        });
+        tableMain.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                super.keyTyped(e);
+            }
+        });
+        tableMain.addMouseListener(new MouseAdapter() {
         });
     }
 }
