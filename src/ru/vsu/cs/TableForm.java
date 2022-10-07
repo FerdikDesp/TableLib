@@ -5,6 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Calendar;
+import java.util.Random;
 
 
 public class TableForm extends JFrame {
@@ -34,7 +35,7 @@ public class TableForm extends JFrame {
 
     private DefaultTableModel tableModel;
 
-    private ListTable table;
+    private ListTable<String> table;
 
     private void addToLog(String log) {
         Calendar cal = Calendar.getInstance();
@@ -73,7 +74,7 @@ public class TableForm extends JFrame {
         tableModel = new DefaultTableModel();
         tableModel.setColumnCount(5);
         tableModel.setRowCount(5);
-        table = new ListTable(tableModel.getRowCount(), tableModel.getColumnCount());
+        table = new ListTable<>(tableModel.getRowCount(), tableModel.getColumnCount());
         tableMain.setModel(tableModel);
         tableMain.getTableHeader().setResizingAllowed(false);
         tableMain.getTableHeader().setReorderingAllowed(false);
@@ -134,7 +135,7 @@ public class TableForm extends JFrame {
             tableModel = new DefaultTableModel();
             tableModel.setColumnCount((Integer) spinnerMax.getValue());
             tableModel.setRowCount((Integer) spinnerMin.getValue());
-            table = new ListTable(tableModel.getRowCount(), tableModel.getColumnCount());
+            table = new ListTable<>(tableModel.getRowCount(), tableModel.getColumnCount());
             tableMain.setModel(tableModel);
             tableMain.getTableHeader().setResizingAllowed(false);
             tableMain.getTableHeader().setReorderingAllowed(false);
@@ -148,7 +149,19 @@ public class TableForm extends JFrame {
                 addToLog("Не удалось заполнить таблицу");
                 return;
             }
-            table.fillRandom((Integer) spinnerMin.getValue(), (Integer) spinnerMax.getValue());
+
+
+            int maxValue = (Integer) spinnerMax.getValue();
+            int minValue = (Integer) spinnerMin.getValue();
+
+            Random random = new Random();
+
+            for (int row = 0; row < tableMain.getRowCount(); row++) {
+                for (int column = 0; column < tableMain.getColumnCount(); column++) {
+                    tableMain.getModel().setValueAt((random.nextInt(maxValue - minValue) + minValue), row, column);
+                }
+            }
+            updateTable();
             ConsoleTable.setText("");
             updateModel();
             addToLog("Таблица была заполнена числами");
@@ -229,7 +242,7 @@ public class TableForm extends JFrame {
             addToLog("Таблица сгруппирована по столбцу " + spinnerNumber.getValue());
         });
         buttonGroupBy.addActionListener(e -> {
-            table = table.groupDataTableBy(textFieldGroupBy.getText());
+            table.groupDataTableBy(textFieldGroupBy.getText());
             tableModel = new DefaultTableModel();
             tableModel.setColumnCount(table.getColumnCount());
             tableModel.setRowCount(table.getRowCount());
@@ -247,14 +260,6 @@ public class TableForm extends JFrame {
                     updateTable();
                 }
             }
-        });
-        tableMain.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                super.keyTyped(e);
-            }
-        });
-        tableMain.addMouseListener(new MouseAdapter() {
         });
     }
 }
